@@ -65,10 +65,77 @@ scene.add(ground);
 // ----------------------------------------------------
 
 const loader = new THREE.TextureLoader();
+/* function loadTiledTexture(url, repeatX, repeatY) {
+    const tex = loader.load(url);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(repeatX, repeatY);
+    return tex;
+}
+*/
+const wallAO = loader.load("https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/plastered_wall_04/plastered_wall_04_ao_4k.png");
+const wallColor = loader.load("https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/plastered_wall_04/plastered_wall_04_diff_4k.png");
+const wallNormal = loader.load("https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/plastered_wall_04/plastered_wall_04_nor_gl_4k.png");
+const wallRough = loader.load("https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/plastered_wall_04/plastered_wall_04_rough_4k.png");
+wallColor.colorSpace = THREE.SRGBColorSpace;
+
+const floorAO = loader.load("https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/plank_flooring/plank_flooring_ao_4k.png");
+const floorColor = loader.load("https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/plank_flooring/plank_flooring_diff_4k.png");
+const floorRough = loader.load("https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/plank_flooring/plank_flooring_rough_4k.png");
+floorColor.colorSpace = THREE.SRGBColorSpace;
 
 // ----------------------------------------------------
 // Geometry
 // ----------------------------------------------------
+
+// Walls
+function createWall(x, y, z, w, h, d) {
+
+    const wallMaterial = new THREE.MeshStandardMaterial({
+        aoMap: wallAO,
+        map: wallColor,
+        normalMap: wallNormal,
+        roughnessMap: wallRough
+    });
+
+    const geometry = new THREE.BoxGeometry(w, h, d);
+    geometry.setAttribute('uv2', geometry.attributes.uv);
+
+	const wall = new THREE.Mesh(geometry, wallMaterial);
+
+
+	wall.position.set(x, y, z);
+	wall.receiveShadow = true;
+
+	scene.add(wall);
+}
+    createWall(-9.5, 4, -12, 5, 8, 0.5);
+    createWall(9.5, 4, -12, 5, 8, 0.5);
+    createWall(0, 2.25, -12, 14, 4.5, 0.5);
+    createWall(0, 7.45, -12, 14, 1.1, 0.5);
+    createWall(-12, 4, 0, 0.5, 8, 24);
+    createWall(12, 4, 0, 0.5, 8, 24);
+
+//Floor
+    const floorGeometry = new THREE.PlaneGeometry(24, 24);
+    floorGeometry.setAttribute('uv2', floorGeometry.attributes.uv);
+
+    const floor = new THREE.Mesh(
+        floorGeometry,
+        new THREE.MeshStandardMaterial({
+		    aoMap: floorAO,
+		    map: floorColor,
+            roughnessMap: floorRough
+	    })
+    );
+
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = 0.01;
+    floor.receiveShadow = true;
+
+    scene.add(floor);
+
+//Window
 
 
 // ----------------------------------------------------
@@ -127,6 +194,7 @@ window.addEventListener("resize", () => {
 // ----------------------------------------------------
 // Animate
 // ----------------------------------------------------
+
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
