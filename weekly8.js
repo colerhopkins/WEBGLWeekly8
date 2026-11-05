@@ -61,23 +61,15 @@ ground.receiveShadow = true;
 scene.add(ground);
 
 // ----------------------------------------------------
-// Example Cube
+// Texture
 // ----------------------------------------------------
-const cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
 
-const cubeMaterial = new THREE.MeshStandardMaterial({
-    color: 0x3366ff
-});
+const loader = new THREE.TextureLoader();
 
-const cube = new THREE.Mesh(
-    cubeGeometry,
-    cubeMaterial
-);
+// ----------------------------------------------------
+// Geometry
+// ----------------------------------------------------
 
-cube.position.y = 2;
-cube.castShadow = true;
-
-scene.add(cube);
 
 // ----------------------------------------------------
 // Ambient Light
@@ -132,18 +124,12 @@ window.addEventListener("resize", () => {
         window.innerHeight
     );
 });
-
 // ----------------------------------------------------
-// Animation Loop
+// Animate
 // ----------------------------------------------------
 function animate() {
-
     requestAnimationFrame(animate);
-
-    cube.rotation.y += 0.01;
-
     controls.update();
-
     renderer.render(scene, camera);
 }
 
